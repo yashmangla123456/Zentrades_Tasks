@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./login.css" />
+    <title>Login</title>
+    <script type="text/javascript">
+      function validate() {
+        var mail = document.querySelector("#mail");
+        var password = document.querySelector("#pass");
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var uppercaseRegex = /[A-Z]/;
+        var numberRegex = /\d/;
+        var specialCharRegex = /[@]/;
+        if (
+          emailRegex.test(userEmail) 
+        ) {alert("correct");
+            return true;
+        } else {
+          alert("Enter valid email address and password");
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="login">
+      <img src="./logo.png" alt="" class="logo" />
+      <input type="email" placeholder="Username" name="" id="mail" />
+      <input type="password" placeholder="Password" name="" id="pass" />
+      <a href="#" class="login-btn" onclick="validate()"> Login</a>
+      <a href="#" class="forgot-pass" onclick="validate()"
+        >Forgot your password?</a
+      >
+    </div>
+  </body>
+</html>

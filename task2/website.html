@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="./temp1.js"></script>
+    <title>My Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: left;
+        }
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: right;
+        }
+        .container1 {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin: 20px;
+            text-align: justify;
+            width: 50vw;
+        }
+        .container2 {
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            margin: 20px;
+            text-align: justify;
+            width: 50vw;
+        }
+        .container3 {
+            border: 1px solid #dee2e6;
+            height: 50vh;
+            width: 100vw;
+            text-align: justify;
+        }
+        .show-list{
+            margin-top: 50px;
+                display: flex;
+        }
+        .contain {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <label>Import Products</label>
+    </header>
+    <div class="contain">
+    <div class="container1">
+        <label>Step 1:</label>
+        <label for="fileUpload">Select File</label><br><br>
+        <input type="file" id="fileUpload" name="fileUpload" />
+        <p>Selected File Types:.CSV, .JSON</p>
+    </div>
+
+    <div class="container2">
+        <label>Step 2:</label>
+        <label>File Format</label><br><br>
+        <label for="FileType">File Type</label>
+        <select id="FileType" name="FileType">
+            <option value="csv">CSV</option>
+            <option value="json">JSON</option>
+        </select><br>
+
+        <label for="CharacterEncoding">Character Encoding</label>
+        <select id="CharacterEncoding" name="CharacterEncoding">
+            <option value="utf-8">UTF-8</option>
+        </select><br>
+
+        <label for="color">Delimiter</label>
+        <select id="color" name="color">
+            <option value="comma">Comma</option>
+        </select><br>
+
+        <label for="terms">Has Header</label>
+        <input type="checkbox" id="terms" name="terms" />
+    </div>
+    </div>
+
+    <div class="container3" style="display: flex; flex-direction: row;">
+        <h6>Display Handling</h6>
+        <h6>Select the fields to be displayed</h6><br>
+        <div class="show-list">
+            <div style="display: flex; flex-direction: column;">
+        <label for="AvailableFields"  > Available Fields</label>
+        <select style="height: 200px; width: 150px;"  id="AvailableFields" size="10" >
+            <option value="Product Id" >Product Id</option>
+                <option value="Subcategory">Subcategory</option>
+                <option value="Title">Title</option>
+                <option value="Price">Price</option>
+                <option value="Description">Description</option>
+                <option value="Rating">Rating</option>
+                <option value="UTM Source">UTM Source</option>
+                <option value="UTM Medium">UTM Medium</option>
+        </select></div>
+        <div style="display: flex; flex-direction: column; margin: 60px 20px;">
+        <button type="button"  onclick="addItem()">>></button>
+        <button type="button" style="margin-top:5px ;" onclick="removeItem()"><<</button>
+    </div>
+    <div style="display: flex; flex-direction: column;">
+    <p>Fields to be Displayed</p>
+    <select id="FieldstobeDisplayed" style="height: 200px; width: 150px;" size="10">
+    <option></option>
+    </select>
+    </div>
+    
+</div>
+</div>
+
+    <footer>
+        <a href="./displayProduct.html"><button >Next</button></a>
+        <button onclick="http://127.0.0.1:5500/website.html">Cancel</button>
+    </footer>
+
+    <script>
+        function addItem() {
+            var item = document.querySelector("#AvailableFields").value;
+            var opt = document.createElement("option");
+            console.log(item);
+            opt.appendChild(document.createTextNode(item));
+            opt.value = item;
+            document.getElementById("FieldstobeDisplayed").appendChild(opt);
+        }
+        function removeItem() {
+            var item=document.getElementById("FieldstobeDisplayed");
+            console.log(item);
+            var select_tag = document.getElementById("FieldstobeDisplayed");
+            if (select_tag.children.length > 0) {
+                select_tag.remove(select_tag.selectedIndex);
+            }
+        }
+        function displayProducts(products) {
+            const productList = document.getElementById("product-list");
+            products.forEach(product => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `Title: ${product.title},\t\t Price: ${product.price}`;
+                productList.appendChild(listItem);
+            });
+        }
+        async function processData(url) {
+            const data = await fetchJsonData(url);
+            let productsArray = [];
+            if(data != null){
+                productsArray = Object.keys(data.products).map((key) => ({
+                    ID:key,
+                    subcategory: data.products[key].subcategory,
+                    title: data.products[key].title,
+                    price: data.products[key].price,
+                    popularity: data.products[key].popularity
+                }));
+            }
+            console.log(productsArray);
+            productsArray.sort((a, b) => b.popularity - a.popularity);
+            displayProducts(productsArray);
+            }
+        processData("https://s3.amazonaws.com/open-to-cors/assignment.json");
+    </script>
+</body>
+</html>
